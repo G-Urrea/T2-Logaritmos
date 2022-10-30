@@ -18,7 +18,9 @@ typedef struct node
 
 } node;
 
-node* createGraph(int n); // Crea un grafo (arreglo de nodos) de tamaño n, requiere liberar memoria.
+node* createGraph(int n); // Crea un grafo (arreglo de nodos) de tamaño n nodos, requiere liberar memoria.
+node* randomGraph(int v, int e); // Crea un grafo de v vértices y e aristas, requiere liberar memoria.
 void addEdge(node** graph, int n, int from, int to, double w); // Añade una arista al grafo
+void printGraph(node *g, int n); // Imprime los nodos con sus listas de adyacencia
 void freeGraph(node** graph, int n); //Libera la memoria pedida por un grafo y sus componentes
 #endif
