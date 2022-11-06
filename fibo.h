@@ -13,16 +13,17 @@ typedef struct _FIB_EL {
     bool visited;
 } FIB_ELEMENT;
 
+typedef  FIB_ELEMENT * PFIB_ELEMENT;
+
 typedef struct fibanocci_heap {
     int n; // tamaño del heap
     int capacity; // capacidad total del heap
     FIB_ELEMENT *min;
     int degree;
-    FIB_ELEMENT *map[];
 } FIB_HEAP;
 
-FIB_HEAP *make_fib_heap(int capacity, FIB_ELEMENT *map[]);
-void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem, node node_v, double new_key);
+FIB_HEAP *make_fib_heap(int capacity);
+void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem);
 FIB_ELEMENT *extract_min(FIB_HEAP *H);
 
 void consolidate(FIB_HEAP *H);

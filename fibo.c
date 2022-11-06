@@ -5,14 +5,12 @@
 #include "graph.h"
 #include "fibo.h"
 
-FIB_HEAP *make_fib_heap(int capacity, FIB_ELEMENT *map[]) {
-  FIB_HEAP *H;
-  H = (FIB_HEAP *)malloc(sizeof(FIB_HEAP));
+FIB_HEAP *make_fib_heap(int capacity) {
+  FIB_HEAP *H = malloc(sizeof(*H));
   H->n = 0;
   H->min = NULL;
   H->capacity = capacity;
   H->degree = 0;
-  H->map[capacity] = map[capacity];
   return H;
 }
 
@@ -39,29 +37,22 @@ void print_fibo(FIB_HEAP *H){
 
 
 // Inserting nodes
-void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem, node node_v, double new_key) {
-  new_elem = (FIB_ELEMENT *)malloc(sizeof(FIB_ELEMENT));
-  new_elem->key = new_key;
-  new_elem->v = node_v;
-  new_elem->degree = 0;
-  new_elem->mark = false;
-  new_elem->parent = NULL;
-  new_elem->child = NULL;
-  new_elem->visited = false;
-  new_elem->left_sibling = new_elem;
-  new_elem->right_sibling = new_elem;
+void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem) {
+
   if (H->min == NULL) {
+    //printf("1\n");
     H->min = new_elem;
   } else {
+    //printf("2\n");
     H->min->left_sibling->right_sibling = new_elem;
     new_elem->right_sibling = H->min;
     new_elem->left_sibling = H->min->left_sibling;
     H->min->left_sibling = new_elem;
     if (new_elem->key < H->min->key) {
+      //printf("3\n");
       H->min = new_elem;
     }
   }
-  (H->map)[new_elem->v.id] = new_elem;
   (H->n)++;
 }
 

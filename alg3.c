@@ -6,15 +6,12 @@
 #include "fibo.h"
 #include "alg3.h"
 
-void fiboDijkstra(node* graph, int n, int root, double** dist, int** prev){
-    FIB_HEAP *h;
-    h = (FIB_HEAP *)malloc(sizeof(FIB_HEAP));
-    FIB_ELEMENT *map[n];
-    h = make_fib_heap(n, map); // Inicializar un fibo_heap
+void fiboDijkstra(node* graph, int n, int root, double** dist, int** prev){  
 
-
+    
+    FIB_HEAP *h = make_fib_heap(n); // Inicializar un fibo_heap
+        
     int visited[n];
-
 
     // Inicializar arreglos dist, prev y visited
     for (int i=0; i<n;i++){
@@ -28,14 +25,30 @@ void fiboDijkstra(node* graph, int n, int root, double** dist, int** prev){
         }
 
     (*dist)[root] = 0;
-    
     // Se insertan los nodos;
-    FIB_ELEMENT *new_elem;
+
+    PFIB_ELEMENT array2[n]; 
     for (int i=0; i<n;i++){
-        insertion(h, new_elem, graph[i], (*dist)[i]);
-        if (i==5){
-            print_fibo(h);
-        }
+        FIB_ELEMENT *new_elem = malloc(sizeof(*new_elem));
+        array2[i] = malloc (sizeof(FIB_ELEMENT));
+
+        new_elem->key = (*dist)[i];
+        new_elem->v = graph[i];
+        new_elem->degree = 0;
+        new_elem->mark = false;
+        new_elem->parent = NULL;
+        new_elem->child = NULL;
+        new_elem->visited = false;
+        new_elem->left_sibling = new_elem;
+        new_elem->right_sibling = new_elem;
+
+        array2[graph[i].id] = new_elem;
+        //printf("new key (%f) \n", (*dist)[i]);
+
+        insertion(h, new_elem);
+        //if (i==6){
+            //print_fibo(h);
+        //}
     }
     //print_fibo(h);
     while (h->n>0 && find_min_node(h)!=NULL){
@@ -53,7 +66,7 @@ void fiboDijkstra(node* graph, int n, int root, double** dist, int** prev){
                     if (alt < (*dist)[vid]){ // alt<dist[v]
                         (*dist)[vid] = alt; //dist[v] <- alt
                         (*prev)[vid] = uid; // prev[v] <- u
-                        decrease_key(h, (h->map[vid]), alt); // Se cambia el peso con decreaseKey
+                        decrease_key(h, (array2[vid]), alt); // Se cambia el peso con decreaseKey
                     }
                 }
             }
