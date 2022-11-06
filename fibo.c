@@ -5,14 +5,14 @@
 #include "graph.h"
 #include "fibo.h"
 
-FIB_HEAP *make_fib_heap() {
+FIB_HEAP *make_fib_heap(int capacity, FIB_ELEMENT *map[]) {
   FIB_HEAP *H;
   H = (FIB_HEAP *)malloc(sizeof(FIB_HEAP));
   H->n = 0;
   H->min = NULL;
-  H->phi = 0;
+  H->capacity = capacity;
   H->degree = 0;
-  H->map = NULL;
+  H->map[capacity] = map[capacity];
   return H;
 }
 
@@ -33,29 +33,10 @@ void print_heap(FIB_ELEMENT *n) {
 }
 
 
-void swap(FIB_ELEMENT* u, FIB_ELEMENT* v, int i, int j, int ** map){
-    /* Recibe 2 elementos (u,v), sus indices en el arreglo del heap (i,j) y el mapeo
-        de sus ids a indice en el heap. 
-    */
-    (*map)[(*u).v.id] = j; // map[id de u] = indice j
-    (*map)[(*v).v.id] = i; // map[id de v] = indice i
-    FIB_ELEMENT temp = *u;
-    *u = *v;
-    *v = temp;
-}
 
 // Inserting nodes
-void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem, double val, node node_v) {
-  new_elem = (FIB_ELEMENT *)malloc(sizeof(FIB_ELEMENT));
-  new_elem->key = val;
-  new_elem->v = node_v;
-  new_elem->degree = 0;
-  new_elem->mark = false;
-  new_elem->parent = NULL;
-  new_elem->child = NULL;
-  new_elem->visited = false;
-  new_elem->left_sibling = new_elem;
-  new_elem->right_sibling = new_elem;
+void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem) {
+  (H->map)[new_elem->v.id] = new_elem;
   if (H->min == NULL) {
     H->min = new_elem;
   } else {
@@ -64,7 +45,7 @@ void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem, double val, node node_v) {
     new_elem->left_sibling = H->min->left_sibling;
     H->min->left_sibling = new_elem;
     if (new_elem->key < H->min->key) {
-      H->min = new_elem
+      H->min = new_elem;
     }
   }
   (H->n)++;
@@ -77,27 +58,6 @@ FIB_ELEMENT *find_min_node(FIB_HEAP *H) {
     return NULL;
   } else
     return H->min;
-}
-
-// Union operation
-FIB_HEAP *unionHeap(FIB_HEAP *H1, FIB_HEAP *H2) {
-  FIB_HEAP *Hnew;
-  Hnew = make_fib_heap();
-  Hnew->min = H1->min;
-
-  FIB_ELEMENT *temp1, *temp2;
-  temp1 = Hnew->min->right_sibling;
-  temp2 = H2->min->left_sibling;
-
-  Hnew->min->right_sibling->left_sibling = H2->min->left_sibling;
-  Hnew->min->right_sibling = H2->min;
-  H2->min->left_sibling = Hnew->min;
-  temp2->right_sibling = temp1;
-
-  if ((H1->min == NULL) || (H2->min != NULL && H2->min->key < H1->min->key))
-    Hnew->min = H2->min;
-  Hnew->n = H1->n + H2->n;
-  return Hnew;
 }
 
 // Calculate the degree
@@ -114,7 +74,7 @@ int cal_degree(int n) {
 void consolidate(FIB_HEAP *H) {
   int degree, i, d;
   degree = cal_degree(H->n);
-  FIB_ELEMENT *A[degree], *x, *y, *z;
+  FIB_ELEMENT *A[degree], *x, *y;
   for (i = 0; i <= degree; i++) {
     A[i] = NULL;
   }
@@ -232,7 +192,6 @@ FIB_ELEMENT *extract_min(FIB_HEAP *H) {
 }
 
 void cut(FIB_HEAP *H, FIB_ELEMENT *node_to_be_decrease, FIB_ELEMENT *parent_node) {
-  FIB_ELEMENT *temp_parent_check;
 
   if (node_to_be_decrease == node_to_be_decrease->right_sibling)
     parent_node->child = NULL;
@@ -267,7 +226,7 @@ void cascading_cut(FIB_HEAP *H, FIB_ELEMENT *parent_node) {
   }
 }
 
-void decrease_key(FIB_HEAP *H, NODE *node_to_be_decrease, int new_key) {
+void decrease_key(FIB_HEAP *H, FIB_ELEMENT *node_to_be_decrease, int new_key) {
   FIB_ELEMENT *parent_node;
   if (H == NULL) {
     printf("\n FIbonacci heap not created ");
@@ -284,9 +243,7 @@ void decrease_key(FIB_HEAP *H, NODE *node_to_be_decrease, int new_key) {
       node_to_be_decrease->key = new_key;
       parent_node = node_to_be_decrease->parent;
       if ((parent_node != NULL) && (node_to_be_decrease->key < parent_node->key)) {
-        printf("\n cut called");
         cut(H, node_to_be_decrease, parent_node);
-        printf("\n cascading cut called");
         cascading_cut(H, parent_node);
       }
       if (node_to_be_decrease->key < H->min->key) {

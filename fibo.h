@@ -14,15 +14,15 @@ typedef struct _FIB_EL {
 } FIB_ELEMENT;
 
 typedef struct fibanocci_heap {
-    int n;
+    int n; // tamaño del heap
+    int capacity; // capacidad total del heap
     FIB_ELEMENT *min;
-    int phi;
     int degree;
-    int* map;
+    FIB_ELEMENT *map[];
 } FIB_HEAP;
 
-FIB_HEAP *make_fib_heap();
-void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem, int val);
+FIB_HEAP *make_fib_heap(int capacity, FIB_ELEMENT *map[]);
+void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem);
 FIB_ELEMENT *extract_min(FIB_HEAP *H);
 void consolidate(FIB_HEAP *H);
 void fib_heap_link(FIB_HEAP *H, FIB_ELEMENT *y, FIB_ELEMENT *x);
