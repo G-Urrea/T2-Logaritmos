@@ -6,6 +6,9 @@ test2: heap.o graph.o alg2.o test2.o
 test3: fibo.o graph.o alg3.o test3.o
 	gcc -flto -ggdb -O2 -o test3 fibo.o graph.o alg3.o test3.o
 
+benchmark: heap.o fibo.o graph.o alg2.o alg3.o benchmark.o
+	gcc -flto -ggdb -O2 -o benchmark heap.o fibo.o graph.o alg2.o alg3.o benchmark.o -lm
+
 heap.o: heap.c
 	gcc ${flags} heap.c
 
