@@ -1,11 +1,10 @@
 #include <stdio.h> 
 #include <stdlib.h>
-#include <stdbool.h>
 #include <math.h>
+#include <stdbool.h>
 #include "graph.h"
 #include "fibo.h"
 #include "alg3.h"
-
 // Programa de testeo con grafos de 8 vertices
 int main(){
     // Grafo no dirigido

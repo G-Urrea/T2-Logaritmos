@@ -21,9 +21,9 @@ void print_heap(FIB_ELEMENT *n) {
   FIB_ELEMENT *x;
   for (x = n;; x = x->right_sibling) {
     if (x->child == NULL) {
-      printf("node with no child (%d) \n", x->key);
+      printf("FIB_ELEM with no child (%f) \n", x->key);
     } else {
-      printf("NODE(%d) with child (%d)\n", x->key, x->child->key);
+      printf("FIB_ELEM(%f) with child (%f)\n", x->key, x->child->key);
       print_heap(x->child);
     }
     if (x->right_sibling == n) {
@@ -32,11 +32,24 @@ void print_heap(FIB_ELEMENT *n) {
   }
 }
 
+void print_fibo(FIB_HEAP *H){
+  print_heap(H->min);
+}
+
 
 
 // Inserting nodes
-void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem) {
-  (H->map)[new_elem->v.id] = new_elem;
+void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem, node node_v, double new_key) {
+  new_elem = (FIB_ELEMENT *)malloc(sizeof(FIB_ELEMENT));
+  new_elem->key = new_key;
+  new_elem->v = node_v;
+  new_elem->degree = 0;
+  new_elem->mark = false;
+  new_elem->parent = NULL;
+  new_elem->child = NULL;
+  new_elem->visited = false;
+  new_elem->left_sibling = new_elem;
+  new_elem->right_sibling = new_elem;
   if (H->min == NULL) {
     H->min = new_elem;
   } else {
@@ -48,6 +61,7 @@ void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem) {
       H->min = new_elem;
     }
   }
+  (H->map)[new_elem->v.id] = new_elem;
   (H->n)++;
 }
 
