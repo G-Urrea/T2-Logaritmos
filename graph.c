@@ -81,7 +81,7 @@ node* randomGraph(int v, int e){
             int u = from[choice];
             // Se puede seleccionar un nodo objetivo de entre los primeros v-2 - número de enlaces de matrix[u]
             int tchoice = rand()% (v-1 - graph[u].n);
-            double w = rand(); // Peso aleatorio
+            double w = rand() + 1; // Peso aleatorio con un offset para evitar pesos = 0
             int u_to =  matrix[u][tchoice];
             addEdge(&graph, v, u, u_to, w); // Se añade eje
             
