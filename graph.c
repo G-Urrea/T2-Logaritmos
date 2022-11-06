@@ -15,23 +15,11 @@ void addEdge(node** graph, int n, int from, int to, double w){
             (*graph)[from].n+=1;
         }
         else{
-            int nlink = (*graph)[from].n;
-            int exists = 0;
-            for (int i=0; i<nlink;i++){
-                if ((*graph)[from].links[i].node==to){
-                    //Ya existe conexión al nodo "to", se cambia el peso
-                    (*graph)[from].links[i].w = w;
-                    exists = 1;
-                    break;
-                }
-            }
-            if(!exists){
-                // No existe conexión, se expande el arreglo de aristas
+                // Se expande el arreglo de aristas
                 (*graph)[from].n+=1;
                 int nlink = (*graph)[from].n;
                 (*graph)[from].links = (edge*)realloc((*graph)[from].links, nlink*sizeof(edge));
                 (*graph)[from].links[nlink-1] = (edge){w, to};
-            }
         }
         
     }
@@ -59,10 +47,7 @@ node* randomGraph(int v, int e){
         //El número de aristas no puede ser mayor v(v-1) en un grafo dirigido
 
         // Inicializar grafo
-        node* graph = malloc(v*sizeof(*graph));
-        for (int i=0; i<v; i++){
-            graph[i] = (node) {NULL, i, 0};
-        }
+        node* graph = createGraph(v);
 
         // Matriz que contiene las posibles conexiones para cada nodo
         int ** matrix = malloc((v) * sizeof *matrix);
@@ -71,7 +56,7 @@ node* randomGraph(int v, int e){
 
         // Inicializar matriz
         int to;
-        for (int i=0; i<v; i++){
+        for (int i=0; i<v; i++){ // O(|V|^2)
             to = 0;
             for (int j=0; j<v-1; j++){
                 
@@ -90,7 +75,7 @@ node* randomGraph(int v, int e){
             from[i] = i;
         // Indica cuantos nodos en from aún pueden tener más aristas    
         int nfrom = v;
-        for (int i=0; i<e; i++){
+        for (int i=0; i<e; i++){ // O(|E|)
             // Escoger un nodo aleatorio
             int choice = rand() % nfrom;
             int u = from[choice];
