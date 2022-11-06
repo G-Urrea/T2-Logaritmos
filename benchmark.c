@@ -29,6 +29,7 @@ void benchmark(int min, int max, int iter, func* f, int nfun, char* filename){
         
         for (int j=0; j<iter; j++){
             // Crear grafos de largo 2^i
+            // Para verificar brevemente la eficiencia de la creación de grafos
             if (j==0)
                 ti = (double)clock()/CLOCKS_PER_SEC; 
             graph = randomGraph(n, p);
@@ -36,8 +37,8 @@ void benchmark(int min, int max, int iter, func* f, int nfun, char* filename){
                 tf = (double)clock()/CLOCKS_PER_SEC; 
                 printf("Tiempo creando grafo: %f\n", tf-ti);
                 }
-            for (int k = 0; k<nfun; k++){
-                int root = rand()%n;
+            int root = rand()%n; // Se selecciona una raíz
+            for (int k = 0; k<nfun; k++){              
                 ti = (double)clock()/CLOCKS_PER_SEC;           
                 f[k](graph, n, root, &dist, &prev); // No necesitamos el valor de retorno
                 tf = (double)clock()/CLOCKS_PER_SEC;
