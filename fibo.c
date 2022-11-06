@@ -5,12 +5,10 @@
 #include "graph.h"
 #include "fibo.h"
 
-FIB_HEAP *make_fib_heap(int capacity) {
+FIB_HEAP *make_fib_heap() {
   FIB_HEAP *H = malloc(sizeof(*H));
   H->n = 0;
   H->min = NULL;
-  H->capacity = capacity;
-  H->degree = 0;
   return H;
 }
 
@@ -76,20 +74,27 @@ int cal_degree(int n) {
 }
 
 // Consolidate function
+
 void consolidate(FIB_HEAP *H) {
+
   int degree, i, d;
   degree = cal_degree(H->n);
-  FIB_ELEMENT *A[degree], *x, *y;
+  FIB_ELEMENT *A[degree];
+  FIB_ELEMENT *x = malloc(sizeof(*x));
+  FIB_ELEMENT *y = malloc(sizeof(*y));
+
   for (i = 0; i <= degree; i++) {
+    A[i] = malloc(sizeof(FIB_ELEMENT));
     A[i] = NULL;
   }
   x = H->min;
   do {
-    d = x->degree;
+    d = cal_degree(x->degree);
+    //d = x->degree;
     while (A[d] != NULL) {
       y = A[d];
       if (x->key > y->key) {
-        FIB_ELEMENT *exchange_help;
+        FIB_ELEMENT *exchange_help = malloc(sizeof(*exchange_help));
         exchange_help = x;
         x = y;
         y = exchange_help;
@@ -161,10 +166,15 @@ FIB_ELEMENT *extract_min(FIB_HEAP *H) {
   if (H->min == NULL)
     printf("\n The heap is empty");
   else {
-    FIB_ELEMENT *temp = H->min;
-    FIB_ELEMENT *pntr;
+    FIB_ELEMENT *temp = malloc(sizeof(*temp));
+    //FIB_ELEMENT *temp;
+    temp = H->min;
+    FIB_ELEMENT *pntr = malloc(sizeof(*pntr));
+    //FIB_ELEMENT *pntr;
     pntr = temp;
-    FIB_ELEMENT *x = NULL;
+    FIB_ELEMENT *x = malloc(sizeof(*x));
+    //FIB_ELEMENT *x;
+    x = NULL;
     if (temp->child != NULL) {
       x = temp->child;
       do {
@@ -193,6 +203,7 @@ FIB_ELEMENT *extract_min(FIB_HEAP *H) {
     H->n = H->n - 1;
     return temp;
   }
+
   return H->min;
 }
 
@@ -219,6 +230,7 @@ void cut(FIB_HEAP *H, FIB_ELEMENT *node_to_be_decrease, FIB_ELEMENT *parent_node
 }
 
 void cascading_cut(FIB_HEAP *H, FIB_ELEMENT *parent_node) {
+  //FIB_ELEMENT *aux = malloc(sizeof(*aux));
   FIB_ELEMENT *aux;
   aux = parent_node->parent;
   if (aux != NULL) {
@@ -232,7 +244,8 @@ void cascading_cut(FIB_HEAP *H, FIB_ELEMENT *parent_node) {
 }
 
 void decrease_key(FIB_HEAP *H, FIB_ELEMENT *node_to_be_decrease, int new_key) {
-  FIB_ELEMENT *parent_node;
+  FIB_ELEMENT *parent_node = malloc(sizeof(*parent_node));
+  //FIB_ELEMENT *parent_node;
   if (H == NULL) {
     printf("\n FIbonacci heap not created ");
     return;
@@ -248,7 +261,9 @@ void decrease_key(FIB_HEAP *H, FIB_ELEMENT *node_to_be_decrease, int new_key) {
       node_to_be_decrease->key = new_key;
       parent_node = node_to_be_decrease->parent;
       if ((parent_node != NULL) && (node_to_be_decrease->key < parent_node->key)) {
+
         cut(H, node_to_be_decrease, parent_node);
+
         cascading_cut(H, parent_node);
       }
       if (node_to_be_decrease->key < H->min->key) {

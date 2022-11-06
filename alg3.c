@@ -9,7 +9,7 @@
 void fiboDijkstra(node* graph, int n, int root, double** dist, int** prev){  
 
     
-    FIB_HEAP *h = make_fib_heap(n); // Inicializar un fibo_heap
+    FIB_HEAP *h = make_fib_heap(); // Inicializar un fibo_heap
         
     int visited[n];
 
@@ -30,7 +30,7 @@ void fiboDijkstra(node* graph, int n, int root, double** dist, int** prev){
     PFIB_ELEMENT array2[n]; 
     for (int i=0; i<n;i++){
         FIB_ELEMENT *new_elem = malloc(sizeof(*new_elem));
-        array2[i] = malloc (sizeof(FIB_ELEMENT));
+        array2[i] = malloc(sizeof(FIB_ELEMENT));
 
         new_elem->key = (*dist)[i];
         new_elem->v = graph[i];

@@ -17,12 +17,10 @@ typedef  FIB_ELEMENT * PFIB_ELEMENT;
 
 typedef struct fibanocci_heap {
     int n; // tamaño del heap
-    int capacity; // capacidad total del heap
     FIB_ELEMENT *min;
-    int degree;
 } FIB_HEAP;
 
-FIB_HEAP *make_fib_heap(int capacity);
+FIB_HEAP *make_fib_heap();
 void insertion(FIB_HEAP *H, FIB_ELEMENT *new_elem);
 FIB_ELEMENT *extract_min(FIB_HEAP *H);
 

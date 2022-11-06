@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include <stdbool.h> 
 #include "graph.h"
 #include "alg1.h"
 #include "alg2.h"
@@ -60,7 +61,10 @@ void benchmark(int min, int max, int iter, func* f, int nfun, char* filename){
 }
 
 int main(){
-    func f[2] = {&naiveDijkstra, &heapDijkstra};
-    benchmark(16, 24, 1, f, 2, "resultados.txt");
+    //func f[1] = {&fiboDijkstra};
+    //func f[1] = {&heapDijkstra};
+    //func f[2] = {&naiveDijkstra, &heapDijkstra};
+    func f[3] = {&naiveDijkstra, &heapDijkstra,&fiboDijkstra};
+    benchmark(16, 24, 50, f, 3, "resultados.txt");
     return 0;
 }
