@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include "graph.h"
-#include "normal.h"
 #include "alg1.h"
 // Programa de testeo con grafos de 8 vertices
 int main(){
@@ -60,7 +59,7 @@ int main(){
     
     printf("Probando grafo no dirigido....\n");
         for(int i=0; i<8; i++){
-        normalDijkstra(g, 8, i, &d, &p);
+        naiveDijkstra(g, 8, i, &d, &p);
         for (int j=0;j<8;j++){
             if(dt[i][j]!=d[j] ||pt[i][j]!=p[j]){
                 printf("Resultado incorrecto con raíz: %d\n", i);
@@ -125,7 +124,7 @@ int main(){
         };
     
     for(int i=0; i<8; i++){
-        normalDijkstra(g2, 8, i, &d, &p);
+        naiveDijkstra(g2, 8, i, &d, &p);
         for (int j=0;j<8;j++){
             if(dt2[i][j]!=d[j] ||pt2[i][j]!=p[j]){
                 printf("Resultado incorrecto con raíz: %d\n", i);
